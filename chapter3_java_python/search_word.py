@@ -1,55 +1,62 @@
-def return_if_word_exist_in_dict(array, word: str):
-    count = 0
-    result = 0
-    result2 = 0
-    result3 = {}
-    for letter in range(0, len(word)):
-        l = word[letter]
-        values = return_letter_if_exist(array, word[letter])
-        result2 = values
-        # print(result2)
-        if result == 0:
-            result = values
-        else:
-            for n in result:
-                print(n)
-                if array[n[0]][n[1]] == l:
-                    if count > 1:
-                        check_which_number_fit(result2)
-                    count+=1
-                    result3[l] = n
-            result = result2
-
-        print(result3)
-    return result
-
-
-def check_which_number_fit(array, words, letter):
-   for n,u in array:
-       print(n)
-       print(u)
-   return 0
-
-
-def return_letter_if_exist(word, letter):
+def return_if_word_exist_in_dict(dictionary, search_word: str):
     value = []
+    values = []
+    for n in search_word:
+        if len(value) == 0:
+            value = check_if_word_exist(n, dictionary, value)
+            values.append(value)
+            continue
+        elif len(value) != 0:
+            value = check_for_the_next_letter(n, dictionary, value)
+            values.append(value)
+            print(value)
+        else:
+
+            return False
+
+    print(values)
+    return True
+
+
+def check_if_word_exist(letter, word, existed_array):
     for n in range(0, len(word)):
-        for r in range(0, len(word[n])):
-            if word[n][r] == letter:
-                if r <= len(word) - 1:
-                    result = [n, r + 1]
-                    value.append(result)
-                if n - 1 >= 0:
-                    values = n - 1
-                    result = [n - 1, r]
-                    value.append(result)
-                if r - 1 >= 0:
-                    values = r - 1
-                    result = [n, r - 1]
-                    value.append(result)
-                if n + 1 <= len(word) - 1:
-                    values = n + 1
-                    result = [n + 1, r]
-                    value.append(result)
-                value.append([n, r])
-    return value
+        for m in range(0, len(word[n])):
+            if len(existed_array) != 0:
+                if n == existed_array[0] and m == existed_array[1]:
+                    continue
+            if word[n][m] == letter:
+                return [n, m]
+    return []
+
+
+def check_for_the_next_letter(letter, dictionary, word):
+    value1 = word[0]
+    value2 = word[1]
+    print(value1)
+    if value1 >= 0 and value1 < len(dictionary):
+        n = value1 + 1
+        if n < len(dictionary):
+            if dictionary[n][value2] == letter:
+                return [n, value2]
+            elif dictionary[value1 - 1][value2] == letter:
+                return [value1 - 1, value2]
+        print(n)
+    if value2 >= 0 and value2 < len(dictionary[value1]):
+        n = value2 + 1
+        if n < len(dictionary[value1]):
+            if dictionary[value1][n] == letter:
+                return [value1, n]
+            elif dictionary[value1][value2 - 1] == letter:
+                return [value1, value2 - 1]
+
+    value = check_if_word_exist(dictionary[value1][value2], dictionary, word)
+    if len(value) != 0:
+        return check_for_the_next_letter(letter, dictionary, value)
+
+
+def check_if_list_already_exist(values, value):
+    for n in values:
+        if n == value:
+            return True
+    return False
+
